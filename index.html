@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pomop - An extended Pomodoro timer with custom settings, tasks, and themes">
+  <title>Pomop - Focus Timer</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏰</text></svg>">
+</head>
+<body>
+  <!-- App Container -->
+  <div class="app-container">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-logo">⏰ Pomop</div>
+      <div class="header-controls">
+        <button id="settingsBtn" class="btn btn-icon" title="Settings" aria-label="Open settings">
+          ⚙️
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      
+      <!-- Timer Section -->
+      <section class="timer-section glass-card">
+        <div class="cycle-indicator" id="cycleIndicator">
+          Pomodoro 1 of 4
+        </div>
+        
+        <div class="phase-label" id="phaseLabel">
+          Focus Time
+        </div>
+        
+        <div class="timer-display">
+          <svg class="timer-circle" viewBox="0 0 300 300">
+            <circle class="timer-circle-bg" cx="150" cy="150" r="140" />
+            <circle 
+              id="timerProgress"
+              class="timer-circle-progress" 
+              cx="150" 
+              cy="150" 
+              r="140"
+              stroke-dasharray="879.6"
+              stroke-dashoffset="0"
+            />
+          </svg>
+          <div class="timer-time" id="timerDisplay">25:00</div>
+        </div>
+        
+        <div class="controls">
+          <button id="resetBtn" class="btn btn-secondary btn-icon" title="Reset" aria-label="Reset timer">
+            ⟲
+          </button>
+          <button id="startBtn" class="btn btn-primary" aria-label="Start timer">
+            ▶ Start
+          </button>
+          <button id="pauseBtn" class="btn btn-primary hidden" aria-label="Pause timer">
+            ⏸ Pause
+          </button>
+          <button id="skipBtn" class="btn btn-secondary btn-icon" title="Skip" aria-label="Skip to next phase">
+            ⏭
+          </button>
+        </div>
+      </section>
+
+      <!-- Settings Panel -->
+      <section id="settingsPanel" class="settings-panel glass-card hidden">
+        <div class="settings-header">
+          <h2 class="settings-title">Settings</h2>
+          <button id="closeSettingsBtn" class="btn btn-secondary">Close</button>
+        </div>
+
+        <!-- Timer Duration Settings -->
+        <div class="setting-group">
+          <label class="setting-label">
+            Focus Duration: <span class="setting-value" id="focusValue">25</span> min
+          </label>
+          <input 
+            type="range" 
+            id="focusDuration" 
+            class="setting-range" 
+            min="1" 
+            max="60" 
+            value="25"
+          >
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">
+            Short Break: <span class="setting-value" id="shortBreakValue">5</span> min
+          </label>
+          <input 
+            type="range" 
+            id="shortBreakDuration" 
+            class="setting-range" 
+            min="1" 
+            max="30" 
+            value="5"
+          >
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">
+            Long Break: <span class="setting-value" id="longBreakValue">15</span> min
+          </label>
+          <input 
+            type="range" 
+            id="longBreakDuration" 
+            class="setting-range" 
+            min="5" 
+            max="60" 
+            value="15"
+          >
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">
+            Pomodoros per Cycle: <span class="setting-value" id="cycleValue">4</span>
+          </label>
+          <input 
+            type="range" 
+            id="cycleLength" 
+            class="setting-range" 
+            min="2" 
+            max="8" 
+            value="4"
+          >
+        </div>
+
+        <!-- Auto-start -->
+        <div class="setting-group">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" id="autoStart" class="checkbox">
+            <span>Auto-start next phase</span>
+          </label>
+        </div>
+
+        <!-- Theme Settings -->
+        <div class="setting-group">
+          <label class="setting-label">Theme</label>
+          <div class="theme-grid">
+            <button class="theme-option active" data-theme="ocean">Ocean</button>
+            <button class="theme-option" data-theme="forest">Forest</button>
+            <button class="theme-option" data-theme="sunset">Sunset</button>
+            <button class="theme-option" data-theme="lavender">Lavender</button>
+            <button class="theme-option" data-theme="minimal">Minimal</button>
+          </div>
+        </div>
+
+        <!-- Mode Toggle -->
+        <div class="setting-group">
+          <label class="setting-label">Mode</label>
+          <div class="mode-toggle">
+            <button id="lightModeBtn" class="btn btn-secondary active">☀️ Light</button>
+            <button id="darkModeBtn" class="btn btn-secondary">🌙 Dark</button>
+          </div>
+        </div>
+
+        <!-- Audio Settings -->
+        <div class="setting-group">
+          <label class="setting-label">
+            Volume: <span class="setting-value" id="volumeValue">70</span>%
+          </label>
+          <input 
+            type="range" 
+            id="volume" 
+            class="setting-range" 
+            min="0" 
+            max="100" 
+            value="70"
+          >
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Timer End Sound</label>
+          <div class="audio-options">
+            <div class="audio-option active" data-sound="bell">
+              <span>🔔 Bell</span>
+              <button class="audio-preview" data-preview="bell">▶</button>
+            </div>
+            <div class="audio-option" data-sound="chime">
+              <span>🎵 Chime</span>
+              <button class="audio-preview" data-preview="chime">▶</button>
+            </div>
+            <div class="audio-option" data-sound="gong">
+              <span>🥁 Gong</span>
+              <button class="audio-preview" data-preview="gong">▶</button>
+            </div>
+            <div class="audio-option" data-sound="ping">
+              <span>🔊 Ping</span>
+              <button class="audio-preview" data-preview="ping">▶</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="setting-group">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" id="notifications" class="checkbox" checked>
+            <span>Enable browser notifications</span>
+          </label>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Task Selection Modal -->
+  <div id="taskModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">🎉 Time for a Long Break!</h2>
+        <button id="closeTaskModal" class="modal-close" aria-label="Close">✕</button>
+      </div>
+      
+      <p class="text-center mb-lg" style="color: var(--text-secondary);">
+        Choose an activity to refresh yourself
+      </p>
+
+      <div class="tasks-grid" id="tasksGrid">
+        <!-- Tasks will be populated by JavaScript -->
+      </div>
+
+      <div class="text-center mb-lg">
+        <button id="randomTaskBtn" class="btn btn-primary">
+          🎲 Surprise Me!
+        </button>
+      </div>
+
+      <div class="custom-tasks">
+        <h3 class="mb-md" style="color: var(--text-primary);">Custom Activities</h3>
+        <div class="task-input-group">
+          <input 
+            type="text" 
+            id="customTaskInput" 
+            class="task-input" 
+            placeholder="Add your own activity..."
+            maxlength="30"
+          >
+          <button id="addTaskBtn" class="btn btn-secondary">+ Add</button>
+        </div>
+        <div id="customTasksList">
+          <!-- Custom tasks will be populated here -->
+        </div>
+      </div>
+
+      <div class="text-center mt-auto">
+        <button id="startBreakBtn" class="btn btn-primary">
+          Start Long Break
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App Script -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
