@@ -15,7 +15,8 @@
         "deb",
         "AppImage"
       ],
-      "category": "Utility"
+      "category": "Utility",
+      "publish": "never"
     }
   },
   "author": "Skysys <skysys@example.com>",
